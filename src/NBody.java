@@ -24,10 +24,13 @@ public class NBody {
 		// TODO: read values at beginning of file to
 		// find the radius
 		
+		int n = s.nextInt();
+		double r = s.nextDouble();
+		
 		s.close();
 		
 		// TODO: return radius read
-		return 0;	
+		return r;	
 	}
 	
 	/**
@@ -42,22 +45,29 @@ public class NBody {
 			Scanner s = new Scanner(new File(fname));
 			
 			// TODO: read # bodies, create array, ignore radius
-			int nb = 0; // # bodies to be read
 			
+			int nb = s.nextInt(); 
+			double meh = s.nextDouble();// # bodies to be read
+			CelestialBody[] derp = new CelestialBody[nb];
 			for(int k=0; k < nb; k++) {
-				
+				double xp = s.nextDouble();
+				double yp = s.nextDouble();
+				double xv = s.nextDouble();
+				double yv = s.nextDouble();
+				double mass = s.nextDouble();
+				String filename = s.next();
+				derp[k] = new CelestialBody(xp,yp,xv,yv,mass,filename);
 				// TODO: read data for each body
 				// construct new body object and add to array
 			}
 			
 			s.close();
-			
 			// TODO: return array of body objects read
-			return null;
+			return derp;
 	}
 	public static void main(String[] args) throws FileNotFoundException{
-		double totalTime = 157788000.0;
-		double dt = 25000.0;
+		double totalTime = 1000000000.0;
+		double dt = 1000000.0;
 		
 		String fname= "./data/planets.txt";
 		if (args.length > 2) {
@@ -76,18 +86,34 @@ public class NBody {
 			
 			// TODO: create double arrays xforces and yforces
 			// to hold forces on each body
+			double[] Xmerp = new double[bodies.length];
+			double[] Ymerp = new double[bodies.length];
 			
 			// TODO: loop over all bodies, calculate
 			// net forces and store in xforces and yforces
 			
+			for(int k=0; k < bodies.length; k++) {
+				Xmerp[k] = bodies[k].calcNetForceExertedByX(bodies);
+				Ymerp[k] = bodies[k].calcNetForceExertedByY(bodies);
+			}
+			
 			// TODO: loop over all bodies and call update
 			// with dt and corresponding xforces, yforces values
+			
+			for(int k=0; k < bodies.length; k++) {
+				bodies[k].update(dt, Xmerp[k], Ymerp[k]);
+				
+			}
 			
 			StdDraw.picture(0,0,"images/starfield.jpg");
 			
 			// TODO: loop over all bodies and call draw on each one
+			for(int k=0; k < bodies.length; k++) {
+				bodies[k].draw();
+			}
 			
 			StdDraw.show(10);
+			
 		}
 		
 		// prints final values after simulation
